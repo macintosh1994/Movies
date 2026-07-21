@@ -74,7 +74,7 @@ export async function getRandomMovie() {
   for (const pick of candidates) {
     try {
       const raw = await omdbGet({ t: pick.title, y: pick.year, type: "movie", plot: "full" });
-      return normalize(raw);
+      return { ...normalize(raw), mansplainSummary: pick.mansplainSummary };
     } catch (err) {
       if (err.status !== 502) throw err; // not a "not found" — a real config/network error
       lastErr = err;

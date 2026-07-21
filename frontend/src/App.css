@@ -338,9 +338,7 @@ button {
 }
 
 .mansplain h3 { color: var(--confession-red); }
-
-.mansplain-line { font-style: italic; color: var(--muted); margin: 10px 0; }
-.mansplain-transition { font-weight: 700; font-style: normal; color: var(--ink); }
+.mansplain p { line-height: 1.6; margin: 14px 0; }
 
 .player-gate form {
   display: flex;

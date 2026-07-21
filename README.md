@@ -73,11 +73,15 @@ Steps in the Vercel dashboard:
 
 ## Where movies come from
 
-OMDb doesn't have a "discover a random movie" endpoint — you can only look up a specific title. So `backend/src/moviePool.js` keeps a curated list of ~150 well-known movies; "give me a movie" picks one at random from that list and fetches its live data (poster, plot, cast, director, genres) from OMDb. Edit that file to add or remove titles.
+OMDb doesn't have a "discover a random movie" endpoint — you can only look up a specific title. So `backend/src/moviePool.js` keeps a curated list of well-known movies; "give me a movie" picks one at random from that list and fetches its live data (poster, plot, cast, director, genres) from OMDb.
+
+The pool is intentionally small (~30 titles) rather than broad. Each entry also carries a hand-written `mansplainSummary` — the actual plot, rewritten in a condescending, over-explaining voice — shown when a player admits (or gets caught not having) watched it. That rewrite can't be done well for an arbitrary movie without an LLM generating it live; keeping the list curated means every summary is genuinely written in that voice, not just a template wrapped around OMDb's plain synopsis. To add a title, write a real mansplaining pass on its plot, not a summary of it.
 
 ## How trivia questions work
 
 Each round, the backend picks one of four question types about the current movie (director, release year, cast member, genre) and generates multiple-choice options — real distractors mixed in with the correct answer. The correct answer is kept server-side (a short-lived token identifies the question) so it's never sent to the browser until after you answer.
+
+When a player admits they haven't seen the movie, or gets the trivia question wrong, they're shown that movie's `mansplainSummary` — never the plain OMDb plot twice over.
 
 ## Data
 
