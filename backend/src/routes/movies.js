@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db } from "../db.js";
-import { getRandomMovie, getFullMovie } from "../tmdb.js";
+import { getRandomMovie, getFullMovie } from "../omdb.js";
 import { generateTrivia } from "../trivia.js";
 import { saveTrivia, takeTrivia } from "../triviaStore.js";
 
@@ -83,8 +83,8 @@ moviesRouter.post("/:id/admit", (req, res) => {
   const player = requirePlayer(req, res);
   if (!player) return;
 
-  const movieId = Number(req.params.id);
-  const movieTitle = req.body?.movieTitle || String(movieId);
+  const movieId = req.params.id;
+  const movieTitle = req.body?.movieTitle || movieId;
 
   const tx = db.transaction(() => {
     insertRoundStmt.run(player.id, movieId, movieTitle, "admitted");

@@ -12,7 +12,7 @@ app.use("/api/players", playersRouter);
 app.use("/api/movie", moviesRouter);
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, tmdbConfigured: Boolean(process.env.TMDB_API_KEY) });
+  res.json({ ok: true, omdbConfigured: Boolean(process.env.OMDB_API_KEY) });
 });
 
 app.use((err, req, res, next) => {
@@ -23,7 +23,7 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Movie honesty game API listening on http://localhost:${port}`);
-  if (!process.env.TMDB_API_KEY) {
-    console.warn("WARNING: TMDB_API_KEY is not set. Copy .env.example to .env and add your key.");
+  if (!process.env.OMDB_API_KEY) {
+    console.warn("WARNING: OMDB_API_KEY is not set. Copy .env.example to .env and add your key.");
   }
 });

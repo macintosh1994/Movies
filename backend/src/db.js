@@ -23,7 +23,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS rounds (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     player_id INTEGER NOT NULL REFERENCES players(id),
-    movie_id INTEGER NOT NULL,
+    movie_id TEXT NOT NULL,
     movie_title TEXT NOT NULL,
     result TEXT NOT NULL CHECK (result IN ('correct', 'incorrect', 'admitted')),
     created_at TEXT NOT NULL DEFAULT (datetime('now'))

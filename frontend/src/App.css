@@ -83,19 +83,14 @@ nav button.active {
   margin: 4px 0 12px;
 }
 
-.providers {
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+.imdb-link {
+  color: #f5c518;
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.provider-badge img {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  vertical-align: middle;
+.imdb-link:hover {
+  text-decoration: underline;
 }
 
 .muted {

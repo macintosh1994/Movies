@@ -10,16 +10,16 @@ A little party game for catching people who claim they've watched a movie they h
 
 ## Stack
 
-- `backend/` — Node + Express API, SQLite (via `better-sqlite3`) for the player/leaderboard data, [TMDB](https://www.themoviedb.org/) for movie data and trivia source material.
+- `backend/` — Node + Express API, SQLite (via `better-sqlite3`) for the player/leaderboard data, [OMDb](https://www.omdbapi.com/) for movie data and trivia source material.
 - `frontend/` — React + Vite single-page app.
 
 ## Setup
 
-### 1. Get a TMDB API key (free)
+### 1. Get an OMDb API key (free)
 
-1. Create an account at https://www.themoviedb.org/signup
-2. Go to https://www.themoviedb.org/settings/api and request a free "API Read Access" / v3 API key
-3. Copy the "API Key (v3 auth)" value
+1. Go to https://www.omdbapi.com/apikey.aspx, pick the free tier, and submit your email
+2. OMDb emails you a key immediately, plus an activation link — click that link before using the key
+3. Copy the key
 
 ### 2. Backend
 
@@ -27,11 +27,11 @@ A little party game for catching people who claim they've watched a movie they h
 cd backend
 npm install
 cp .env.example .env
-# edit .env and paste your TMDB_API_KEY
+# edit .env and paste your OMDB_API_KEY
 npm run dev
 ```
 
-The API runs on `http://localhost:3001`. `GET /api/health` reports whether a TMDB key is configured.
+The API runs on `http://localhost:3001`. `GET /api/health` reports whether an OMDb key is configured.
 
 ### 3. Frontend
 
@@ -44,6 +44,10 @@ npm run dev
 ```
 
 Open the printed URL (typically `http://localhost:5173`). The dev server proxies `/api/*` to the backend.
+
+## Where movies come from
+
+OMDb doesn't have a "discover a random movie" endpoint — you can only look up a specific title. So `backend/src/moviePool.js` keeps a curated list of ~150 well-known movies; "give me a movie" picks one at random from that list and fetches its live data (poster, plot, cast, director, genres) from OMDb. Edit that file to add or remove titles.
 
 ## How trivia questions work
 
