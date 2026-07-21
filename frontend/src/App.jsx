@@ -12,6 +12,7 @@ const PHASE = {
   MOVIE: "movie",
   TRIVIA: "trivia",
   ADMITTED: "admitted",
+  BUSTED: "busted",
 };
 
 export default function App() {
@@ -92,10 +93,14 @@ export default function App() {
     }
   }
 
-  function handleTriviaResolved() {
+  function handleTriviaResolved(result) {
     setRefreshKey((k) => k + 1);
     refreshPlayer();
-    fetchMovie();
+    if (result.correct) {
+      fetchMovie();
+    } else {
+      setPhase(PHASE.BUSTED);
+    }
   }
 
   if (!player) {
@@ -156,7 +161,7 @@ export default function App() {
           )}
 
           {movie && phase !== PHASE.IDLE && (
-            <MovieCard movie={movie} revealPlot={phase !== PHASE.MOVIE} />
+            <MovieCard movie={movie} revealPlot={phase === PHASE.TRIVIA} />
           )}
 
           {phase === PHASE.MOVIE && (
@@ -172,8 +177,13 @@ export default function App() {
             />
           )}
 
-          {phase === PHASE.ADMITTED && movie && (
-            <MansplainReveal movie={movie} onNext={fetchMovie} loading={loading} />
+          {(phase === PHASE.ADMITTED || phase === PHASE.BUSTED) && movie && (
+            <MansplainReveal
+              movie={movie}
+              variant={phase === PHASE.BUSTED ? "busted" : "confessed"}
+              onNext={fetchMovie}
+              loading={loading}
+            />
           )}
 
           {error && <p className="error">{error}</p>}

@@ -27,23 +27,54 @@ const CLOSERS = [
   "Glad I could clear that up for you.",
 ];
 
+const MID_ASIDES = [
+  "— yes, really —",
+  "(stay with me)",
+  "— I know, riveting —",
+  "(try to keep up)",
+  "— shocking, right? —",
+];
+
 function pick(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-export default function MansplainReveal({ movie, onNext, loading }) {
+function splitSentences(text) {
+  return text.split(/(?<=[.!?])\s+/).filter(Boolean);
+}
+
+export default function MansplainReveal({ movie, onNext, loading, variant = "confessed" }) {
   const opener = useMemo(() => pick(OPENERS), [movie.id]);
   const transition = useMemo(() => pick(TRANSITIONS), [movie.id]);
   const closer = useMemo(() => pick(CLOSERS), [movie.id]);
+  const aside = useMemo(() => pick(MID_ASIDES), [movie.id]);
+
+  const overview = movie.overview || "there's a plot. Movies tend to have those.";
+  const sentences = splitSentences(overview);
+  const busted = variant === "busted";
 
   return (
-    <div className="card mansplain" data-tag="Confession">
-      <div className="stamp logged">Confession Logged</div>
-      <h3>You haven't seen {movie.title}??</h3>
+    <div className="card mansplain" data-tag={busted ? "Perjury" : "Confession"}>
+      <div className={"stamp " + (busted ? "perjury" : "logged")}>
+        {busted ? "Perjury Confirmed" : "Confession Logged"}
+      </div>
+      <h3>
+        {busted ? (
+          <>Caught you — you haven't seen {movie.title}.</>
+        ) : (
+          <>You haven't seen {movie.title}??</>
+        )}
+      </h3>
       <p className="mansplain-opener">{opener}</p>
       <p>
-        <span className="mansplain-transition">{transition}</span>{" "}
-        {movie.overview || "there's a plot. Movies tend to have those."}
+        <span className="mansplain-transition">{transition}</span> {sentences[0] || overview}
+        {sentences.length > 2 && (
+          <>
+            {" "}
+            <em>{aside}</em> {sentences.slice(1).join(" ")}
+          </>
+        )}
+        {sentences.length === 2 && <> {sentences[1]}</>}
       </p>
       <p className="mansplain-closer">{closer}</p>
       <button className="btn-primary" onClick={onNext} disabled={loading}>

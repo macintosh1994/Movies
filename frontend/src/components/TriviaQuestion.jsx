@@ -72,7 +72,7 @@ export default function TriviaQuestion({ movie, trivia, playerId, onResolved }) 
               : `Correct answer was "${result.correctAnswer}". That's a strike on your record.`}
           </p>
           <button className="btn-primary" onClick={() => onResolved(result)}>
-            Get another movie
+            {result.correct ? "Get another movie" : "See what you missed"}
           </button>
         </div>
       )}
