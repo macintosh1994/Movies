@@ -178,13 +178,16 @@ nav button.active {
 
 .movie-card-body {
   display: flex;
+  align-items: flex-start;
   gap: 20px;
 }
 
 .poster {
   width: 140px;
+  height: auto;
   border-radius: 4px;
   flex-shrink: 0;
+  align-self: flex-start;
 }
 
 h2 {
@@ -214,15 +217,6 @@ h3 {
   font-size: 0.68rem;
   letter-spacing: 0.03em;
 }
-
-.overview { line-height: 1.55; font-size: 0.92rem; margin: 12px 0 0; }
-
-.imdb-link {
-  color: var(--spotlight-strong);
-  font-weight: 700;
-  text-decoration: none;
-}
-.imdb-link:hover { text-decoration: underline; }
 
 .button-row, .row {
   display: flex;

@@ -1,4 +1,4 @@
-export default function MovieCard({ movie, revealPlot }) {
+export default function MovieCard({ movie }) {
   return (
     <div className="card movie-card" data-tag="Exhibit A">
       <div className="movie-card-body">
@@ -16,18 +16,6 @@ export default function MovieCard({ movie, revealPlot }) {
                 </span>
               ))}
             </div>
-          )}
-          {revealPlot && (
-            <>
-              <p className="overview">{movie.overview}</p>
-              {movie.imdbLink && (
-                <p>
-                  <a className="imdb-link" href={movie.imdbLink} target="_blank" rel="noreferrer">
-                    View on IMDb
-                  </a>
-                </p>
-              )}
-            </>
           )}
         </div>
       </div>

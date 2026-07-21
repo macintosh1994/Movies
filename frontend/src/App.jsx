@@ -161,7 +161,7 @@ export default function App() {
           )}
 
           {movie && phase !== PHASE.IDLE && (
-            <MovieCard movie={movie} revealPlot={phase === PHASE.TRIVIA} />
+            <MovieCard movie={movie} />
           )}
 
           {phase === PHASE.MOVIE && (
