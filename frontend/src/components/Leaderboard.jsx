@@ -13,7 +13,7 @@ export default function Leaderboard({ refreshKey }) {
   }, [refreshKey]);
 
   return (
-    <div className="card leaderboard">
+    <div className="card leaderboard" data-tag="Case Registry">
       <h2>Leaderboard</h2>
       {error && <p className="error">{error}</p>}
       {players.length === 0 ? (

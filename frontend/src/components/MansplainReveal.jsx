@@ -37,7 +37,8 @@ export default function MansplainReveal({ movie, onNext, loading }) {
   const closer = useMemo(() => pick(CLOSERS), [movie.id]);
 
   return (
-    <div className="card mansplain">
+    <div className="card mansplain" data-tag="Confession">
+      <div className="stamp logged">Confession Logged</div>
       <h3>You haven't seen {movie.title}??</h3>
       <p className="mansplain-opener">{opener}</p>
       <p>

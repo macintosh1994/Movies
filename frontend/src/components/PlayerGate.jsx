@@ -22,8 +22,8 @@ export default function PlayerGate({ onPlayerSet }) {
   }
 
   return (
-    <div className="card player-gate">
-      <h2>Who's playing?</h2>
+    <div className="card player-gate" data-tag="Sign In">
+      <h2>State your name for the record</h2>
       <p className="muted">Enter your name to start racking up (or avoiding) strikes.</p>
       <form onSubmit={handleSubmit}>
         <input

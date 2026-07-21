@@ -56,10 +56,34 @@ function normalize(raw) {
   };
 }
 
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// OMDb's title+year lookup is an exact match, so a handful of pool entries
+// occasionally miss (formatting quirks, alternate titles, etc). Retry with
+// different picks rather than surfacing a raw "Movie not found!" to players.
 export async function getRandomMovie() {
-  const pick = MOVIE_POOL[Math.floor(Math.random() * MOVIE_POOL.length)];
-  const raw = await omdbGet({ t: pick.title, y: pick.year, type: "movie" });
-  return normalize(raw);
+  const candidates = shuffle(MOVIE_POOL).slice(0, 6);
+  let lastErr;
+  for (const pick of candidates) {
+    try {
+      const raw = await omdbGet({ t: pick.title, y: pick.year, type: "movie", plot: "full" });
+      return normalize(raw);
+    } catch (err) {
+      if (err.status !== 502) throw err; // not a "not found" — a real config/network error
+      lastErr = err;
+    }
+  }
+  const err = new Error("Couldn't find a movie to show you just now — try again.");
+  err.status = 502;
+  err.cause = lastErr;
+  throw err;
 }
 
 export async function getFullMovie(imdbId) {
