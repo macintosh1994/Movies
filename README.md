@@ -12,7 +12,7 @@ A little party game for catching people who claim they've watched a movie they h
 
 - `backend/` — Node + Express API, Postgres (via `pg`) for the player/leaderboard data, [OMDb](https://www.omdbapi.com/) for movie data and trivia source material.
 - `frontend/` — React + Vite single-page app.
-- `api/index.js` + root `package.json`/`vercel.json` — wraps the same Express app as a single Vercel serverless function, so the whole thing deploys as one Vercel project (static frontend + `/api/*` functions, same origin, no CORS juggling).
+- Root `vercel.json` — deploys `frontend/` and `backend/` as two separate Vercel services under one project: `frontend` is the static Vite build, `backend` runs as a real persistent Express service. A rewrite sends `/api/*` to the backend service and everything else to the frontend, so from the browser it all looks like one origin.
 
 ## Local setup
 
@@ -57,15 +57,19 @@ Open the printed URL (typically `http://localhost:5173`). The dev server proxies
 
 ## Deploying to Vercel
 
-This repo is already set up to deploy as a single Vercel project (static frontend + `/api/*` serverless functions). Steps to do in the Vercel dashboard:
+This repo deploys as one Vercel project made of two services (`vercel.json` at the root defines this — Vercel's importer should detect it automatically as the "Services" application preset):
 
-1. **Import the repo**: New Project → import `macintosh1994/movies` → pick the branch you want deployed (e.g. `claude/hello-6y9ha6`, or `main` once merged).
-   - Leave **Root Directory** as the repo root (don't point it at `frontend/`).
-   - Vercel should auto-detect `vercel.json`, which sets the build command, output directory (`frontend/dist`), and the `/api/*` rewrite for you.
-2. **Add a Postgres database**: in the project, go to **Storage → Create Database → Postgres** (or connect an existing Neon/Postgres database). Connecting it via the dashboard auto-injects `POSTGRES_URL` into your project's environment variables — no copy-pasting needed.
-3. **Add your OMDb key**: **Settings → Environment Variables** → add `OMDB_API_KEY` with the value from omdbapi.com, for Production (and Preview, if you want preview deploys to work too).
+- `frontend` — root `frontend/`, built with Vite, served as static files.
+- `backend` — root `backend/`, run as a persistent Express service (`npm start` → `node src/index.js`, listening on the `PORT` Vercel provides).
+- A rewrite sends `/api/*` to the `backend` service and everything else to `frontend`, so the browser sees one origin with no CORS issues.
+
+Steps in the Vercel dashboard:
+
+1. **Import the repo**: New Project → import `macintosh1994/movies` → pick the branch you want deployed (e.g. `claude/hello-6y9ha6`, or `main` once merged). With the "Services" preset, Vercel should list `frontend` (Vite) and `backend` (Express) automatically from `vercel.json` — no manual root directory config needed for either.
+2. **Add a Postgres database**: in the project, go to **Storage → Create Database → Postgres** (or connect an existing Neon/Postgres database). Connecting it via the dashboard auto-injects `POSTGRES_URL` into your project's environment variables — no copy-pasting needed. Make sure it's available to the **backend** service.
+3. **Add your OMDb key**: **Settings → Environment Variables** → add `OMDB_API_KEY` with the value from omdbapi.com, scoped to the backend service, for Production (and Preview, if you want preview deploys to work too).
 4. **Deploy**: trigger a deploy (pushing to the connected branch triggers one automatically, or hit **Deploy** in the dashboard).
-5. Once it's live, hit `https://<your-project>.vercel.app/api/health` — it should report `{"ok":true,"omdbConfigured":true,"dbConfigured":true}`. If either is `false`, double check the environment variables landed on the right environment (Production vs Preview) and redeploy.
+5. Once it's live, hit `https://<your-project>.vercel.app/api/health` — it should report `{"ok":true,"omdbConfigured":true,"dbConfigured":true}`. If either is `false`, double check the environment variables landed on the backend service in the right environment (Production vs Preview) and redeploy.
 
 ## Where movies come from
 
