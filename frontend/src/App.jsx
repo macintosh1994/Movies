@@ -4,6 +4,7 @@ import PlayerGate from "./components/PlayerGate.jsx";
 import MovieCard from "./components/MovieCard.jsx";
 import WatchedPrompt from "./components/WatchedPrompt.jsx";
 import TriviaQuestion from "./components/TriviaQuestion.jsx";
+import MansplainReveal from "./components/MansplainReveal.jsx";
 import Leaderboard from "./components/Leaderboard.jsx";
 
 const PHASE = {
@@ -143,13 +144,8 @@ export default function App() {
             />
           )}
 
-          {phase === PHASE.ADMITTED && (
-            <div className="card center">
-              <p>Fair enough — no strike for admitting it. Go watch it sometime!</p>
-              <button className="btn-primary" onClick={fetchMovie} disabled={loading}>
-                {loading ? "Finding a movie..." : "Get another movie"}
-              </button>
-            </div>
+          {phase === PHASE.ADMITTED && movie && (
+            <MansplainReveal movie={movie} onNext={fetchMovie} loading={loading} />
           )}
 
           {error && <p className="error">{error}</p>}

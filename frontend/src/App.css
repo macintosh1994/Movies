@@ -83,6 +83,25 @@ nav button.active {
   margin: 4px 0 12px;
 }
 
+.mansplain h3 {
+  color: #e3564f;
+}
+
+.mansplain-opener {
+  font-style: italic;
+  color: #9a9aa8;
+}
+
+.mansplain-transition {
+  font-weight: 700;
+}
+
+.mansplain-closer {
+  font-style: italic;
+  color: #9a9aa8;
+  margin-bottom: 16px;
+}
+
 .imdb-link {
   color: #f5c518;
   font-weight: 600;
